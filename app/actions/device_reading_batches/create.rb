@@ -64,12 +64,13 @@ module Rayhub
             taken_at = reading[:timestamp]
             count = reading[:count]
 
-            Events::DeviceReading::Store << 
+            Events::DeviceReading::Queue.enqueue(
               Events::DeviceReading.new(
                 device_id:,
                 taken_at:,
                 count:,
               )
+            )
           end
 
           response.status = :created

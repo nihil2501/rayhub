@@ -10,15 +10,20 @@ module Rayhub
       )
 
     class DeviceReading
-      module Store
+      module Queue
         class << self
-          include Enumerable
-          extend Forwardable
+          def enqueue(event)
+            events << event
+          end
 
-          def_delegators :records, :<<, :each
+          def dequeue
+            events.shift
+          end
 
-          def records
-            @records ||= []
+          private
+
+          def events
+            @events ||= []
           end
         end
       end
