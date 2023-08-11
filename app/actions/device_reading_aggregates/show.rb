@@ -5,7 +5,7 @@ module Rayhub
     module DeviceReadingAggregates
       class Show < Rayhub::Action
         params do
-          required(:device_id).value(:integer)
+          required(:device_id).filled(:string)
           optional(:statistics).array(:string)
           optional(:as_of).value(:date_time)
         end

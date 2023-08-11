@@ -2,7 +2,7 @@
 
 module Rayhub
   module Actions
-    module DeviceReadingBatches
+    module DeviceReadingEvents
       # We might want to persist the input to this action and return from it
       # as quickly as possible. There are three distinct operations that will
       # impact the cost of the work performed by this endpoint depending on
