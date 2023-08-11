@@ -7,8 +7,6 @@ module Rayhub
         params do
           required(:device_id).filled(:string)
           optional(:attributes).array(:string)
-          optional(:since).value(:date_time)
-          optional(:until).value(:date_time)
         end
 
         def handle(*, response)

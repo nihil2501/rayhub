@@ -13,3 +13,4 @@
 * Event driven design
 * Replayability
 * Payload schema versioning
+* Cache and efficiently re-use the output of every (since, until) input so that API can offer that interface?

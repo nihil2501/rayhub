@@ -56,17 +56,15 @@ module Rayhub
 
         def handle(request, response)
           device_id = request.params[:id]
+          queue = Events::DeviceReading::Queue[device_id]
+
           readings = request.params[:readings]
-
           readings.each do |reading|
-            taken_at = reading[:timestamp]
-            count = reading[:count]
-
-            Events::DeviceReading::Queue.enqueue(
+            queue.enqueue(
               Events::DeviceReading.new(
                 device_id:,
-                taken_at:,
-                count:,
+                taken_at: reading[:timestamp],
+                count: reading[:count],
               )
             )
           end

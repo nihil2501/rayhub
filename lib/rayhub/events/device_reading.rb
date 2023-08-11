@@ -10,21 +10,24 @@ module Rayhub
       )
 
     class DeviceReading
-      module Queue
+      class Queue
         class << self
-          def enqueue(event)
-            events.push(event)
+          def [](device_id)
+            @device_queues ||= Hash.new { |h, k| h[k] = new }
+            @device_queues[device_id]
           end
+        end
 
-          def dequeue
-            events.shift
-          end
+        def initialize
+          @events = []
+        end
 
-          private
+        def enqueue(event)
+          @events.push(event)
+        end
 
-          def events
-            @events ||= []
-          end
+        def dequeue
+          @events.shift
         end
       end
     end
