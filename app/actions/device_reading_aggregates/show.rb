@@ -6,8 +6,9 @@ module Rayhub
       class Show < Rayhub::Action
         params do
           required(:device_id).filled(:string)
-          optional(:statistics).array(:string)
-          optional(:as_of).value(:date_time)
+          optional(:attributes).array(:string)
+          optional(:since).value(:date_time)
+          optional(:until).value(:date_time)
         end
 
         def handle(*, response)

@@ -46,8 +46,6 @@ module Rayhub
       # processing. We could probably choose an API object shape that matches
       # the domain model.
       class Create < Rayhub::Action
-        before :validate_params
-
         params do
           required(:id).filled(:string)
           required(:readings).array(:hash) do
@@ -75,15 +73,6 @@ module Rayhub
 
           response.status = :created
           response.body = ""
-        end
-
-        private
-
-        def validate_params(request, *)
-          return if request.params.valid?
-
-          body = { errors: request.params.errors }.to_json
-          halt :unprocessable_entity, body
         end
       end
     end

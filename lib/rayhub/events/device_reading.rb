@@ -13,7 +13,7 @@ module Rayhub
       module Queue
         class << self
           def enqueue(event)
-            events << event
+            events.push(event)
           end
 
           def dequeue
