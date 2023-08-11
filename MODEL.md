@@ -11,3 +11,11 @@ device_reading_batches
   reading_batch
     taken_at
     count
+
+readings
+  device_id
+  entity_id
+  attribute
+  value
+  read_at
+  received_at

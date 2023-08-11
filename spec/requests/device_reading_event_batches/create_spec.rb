@@ -1,6 +1,6 @@
 # spec/requests/books/create_spec.rb
 
-RSpec.describe "POST /device_reading_batches", type: [:request] do
+RSpec.describe "POST /device_reading_event_batches", type: [:request] do
   let(:request_headers) do
     {
       "HTTP_ACCEPT" => "application/json",
@@ -25,8 +25,12 @@ RSpec.describe "POST /device_reading_batches", type: [:request] do
       }
     end
 
-    it "creates a device reading batch" do
-      post "/device_reading_batches", params.to_json, request_headers
+    it "creates a device reading event batch" do
+      post(
+        "/device_reading_event_batches",
+        params.to_json,
+        request_headers,
+      )
 
       expect(last_response).to be_created
       expect(last_response.body).to eq(%{})
@@ -39,10 +43,13 @@ RSpec.describe "POST /device_reading_batches", type: [:request] do
     end
 
     it "returns 422 unprocessable" do
-      post "/device_reading_batches", params.to_json, request_headers
+      post(
+        "/device_reading_event_batches",
+        params.to_json,
+        request_headers,
+      )
 
       expect(last_response).to be_unprocessable
-
       expect(JSON.parse(last_response.body)).to eq({
         "id" => ["is missing"],
         "readings" => ["is missing"]

@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 module Rayhub
-  module Models
-    DeviceReadingBatch = Data.define(:device, :reading_batch)
-    DeviceReadingBatch::Device = Data.define(:id)
-    DeviceReadingBatch::ReadingBatch = Data.define(:taken_at, :count)
+  module Events
+    DeviceReading =
+      Data.define(
+        :device_id,
+        :taken_at,
+        :count,
+      )
 
-    class DeviceReadingBatch
+    class DeviceReading
       module Store
         class << self
           include Enumerable

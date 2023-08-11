@@ -12,3 +12,4 @@
 * Persistence
 * Event driven design
 * Replayability
+* Payload schema versioning
