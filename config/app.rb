@@ -4,5 +4,6 @@ require "hanami"
 
 module Rayhub
   class App < Hanami::App
+    config.actions.format :json
   end
 end

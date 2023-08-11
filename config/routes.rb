@@ -2,6 +2,6 @@
 
 module Rayhub
   class Routes < Hanami::Routes
-    root { "Hello from Hanami" }
+    post "/device_reading_batches", to: "device_reading_batches.create"
   end
 end
