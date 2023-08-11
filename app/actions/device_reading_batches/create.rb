@@ -2,7 +2,7 @@
 
 module Rayhub
   module Actions
-    module DeviceReadingEvents
+    module DeviceReadingBatches
       # We might want to persist the input to this action and return from it
       # as quickly as possible. There are three distinct operations that will
       # impact the cost of the work performed by this endpoint depending on
@@ -81,7 +81,7 @@ module Rayhub
         def validate_params(request, *)
           return if request.params.valid?
 
-          body = request.params.errors.to_json
+          body = { errors: request.params.errors }.to_json
           halt :unprocessable_entity, body
         end
       end
