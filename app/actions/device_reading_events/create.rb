@@ -2,7 +2,7 @@
 
 module Rayhub
   module Actions
-    module DeviceReadingEventBatches
+    module DeviceReadingEvents
       # We might want to persist the input to this action and return from it
       # as quickly as possible. There are three distinct operations that will
       # impact the cost of the work performed by this endpoint depending on
@@ -43,7 +43,7 @@ module Rayhub
       #
       # Here, we perform request parameter validation and then domain model
       # mapping in two separate steps and then forego any further data
-      # processing. We couldprobably choose an API object shape that matches
+      # processing. We could probably choose an API object shape that matches
       # the domain model.
       class Create < Rayhub::Action
         before :validate_params
