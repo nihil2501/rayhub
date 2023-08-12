@@ -2,7 +2,7 @@
 
 module Rayhub
   module Actions
-    module DeviceReadingEvents
+    module DeviceReadings
       # We might want to persist the input to this action and return from it
       # as quickly as possible. There are three distinct operations that will
       # impact the cost of the work performed by this endpoint depending on
@@ -56,16 +56,13 @@ module Rayhub
 
         def handle(request, response)
           device_id = request.params[:id]
-          queue = Events::DeviceReading::Queue[device_id]
-
           readings = request.params[:readings]
+
           readings.each do |reading|
-            queue.enqueue(
-              Events::DeviceReading.new(
-                device_id:,
-                taken_at: reading[:timestamp],
-                count: reading[:count],
-              )
+            Events::DeviceReading.create(
+              device_id:,
+              taken_at: reading[:timestamp],
+              count: reading[:count],
             )
           end
 

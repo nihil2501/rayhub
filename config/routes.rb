@@ -3,13 +3,13 @@
 module Rayhub
   class Routes < Hanami::Routes
     post(
-      "/device_reading_events",
-      to: "device_reading_events.create"
+      "/device_readings",
+      to: "device_readings.create"
     )
 
     get(
-      "/device_reading_aggregates/:device_id",
-      to: "device_reading_aggregates.show"
+      "/device_readings/:device_id",
+      to: "device_readings.summary"
     )
   end
 end

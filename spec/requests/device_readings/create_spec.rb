@@ -1,6 +1,6 @@
 # spec/requests/books/create_spec.rb
 
-RSpec.describe "POST /device_reading_events", type: [:request] do
+RSpec.describe "POST /device_readings", type: [:request] do
   let(:request_headers) do
     {
       "HTTP_ACCEPT" => "application/json",
@@ -25,9 +25,9 @@ RSpec.describe "POST /device_reading_events", type: [:request] do
       }
     end
 
-    it "creates a device reading event" do
+    it "creates a device reading" do
       post(
-        "/device_reading_events",
+        "/device_readings",
         params.to_json,
         request_headers,
       )
@@ -44,7 +44,7 @@ RSpec.describe "POST /device_reading_events", type: [:request] do
 
     it "returns 422 unprocessable" do
       post(
-        "/device_reading_events",
+        "/device_readings",
         params.to_json,
         request_headers,
       )
