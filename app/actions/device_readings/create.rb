@@ -59,15 +59,15 @@ module Rayhub
           readings = request.params[:readings]
 
           readings.each do |reading|
-            Events::DeviceReading.create(
-              device_id:,
+            Events::DeviceReading::Count.create(
               taken_at: reading[:timestamp],
-              count: reading[:count],
+              quantity: reading[:count],
+              device_id:,
             )
           end
 
-          response.status = :created
           response.body = ""
+          response.status = :created
         end
       end
     end

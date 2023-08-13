@@ -5,18 +5,31 @@ module Rayhub
     DeviceReading =
       Data.define(
         :device_id,
+        # For now, the `reading_type` information is already captured by the
+        # class itself.
+        # :reading_type,
+        :quantity,
+        :unit,
         :taken_at,
-        :count,
       )
 
     class DeviceReading
       class << self
         def create(**attrs)
-          @queues ||= Hash.new { |h, k| h[k] = [] }
-          queue = @queues[attrs[:device_id]]
-          event = new(**attrs)
-          queue << event
+          attrs = {
+            unit: self::UNIT,
+            **attrs,
+          }
+
+          new(**attrs).tap do |event|
+            # TODO: document our interesting thinking here.
+            EventSourcing.on_event_loaded(event)
+          end
         end
+      end
+
+      class Count < self
+        UNIT = :each
       end
     end
   end
