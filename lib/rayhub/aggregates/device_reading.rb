@@ -5,15 +5,35 @@ require "event_sourcing"
 module Rayhub
   module Aggregates
     class DeviceReading
+      Error = Class.new(RuntimeError)
+      NotFound = Class.new(Error)
+
       class << self
         def find(device_id)
           id = :"#{self}/#{device_id}"
-          @repository ||= Hash.new { |h, k| h[k] = new(k) }
+          @repository ||=
+            Hash.new do |memo, id|
+              memo[id] = new(id)
+            end
 
           @repository[id].tap do |aggregate|
-            # TODO: document our interesting thinking here.
+            # TODO: Document our interesting thinking here.
             EventSourcing.on_aggregate_loaded(aggregate)
+            # TODO: Figure out what to do about erroneous queues!
+            ensure_found!(aggregate)
           end
+        end
+
+        private
+
+        # TODO: Describe simulate-hood of this.
+        def ensure_found!(aggregate)
+          taken_ats = aggregate.instance_variable_get(:@taken_ats)
+          found = !taken_ats.empty?
+          return if found
+
+          @repository.delete(aggregate.id)
+          raise NotFound
         end
       end
 
@@ -21,17 +41,20 @@ module Rayhub
 
       def initialize(device_id)
         @device_id = device_id
+        @taken_ats = Set[]
       end
 
       private
 
       def redundant?(event)
-        @taken_ats ||= Set[]
         !@taken_ats.add?(event.taken_at)
       end
 
       class Count < self
-        attr_reader :max_taken_at, :quantity_sum
+        attr_reader(
+          :max_taken_at,
+          :quantity_sum,
+        )
 
         # TODO: Define this generically in parent class as a function that
         # applies the event in topological order to a declaratively defined DAG
