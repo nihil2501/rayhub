@@ -33,6 +33,9 @@ module EventSourcing
   end
 
   module Topics
-    COUNT_DEVICE_READING = "device-reading/%{device_id}/count"
+    ALL = [
+      COUNT_DEVICE_READING =
+        "device-reading/%{device_id}/count",
+    ].freeze
   end
 end

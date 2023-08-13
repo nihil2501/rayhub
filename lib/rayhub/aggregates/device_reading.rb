@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "event_sourcing"
+
 module Rayhub
   module Aggregates
     class DeviceReading
@@ -29,9 +31,7 @@ module Rayhub
       end
 
       class Count < self
-        attr_reader \
-          :max_taken_at,
-          :quantity_sum,
+        attr_reader :max_taken_at, :quantity_sum
 
         # TODO: Define this generically in parent class as a function that
         # applies the event in topological order to a declaratively defined DAG

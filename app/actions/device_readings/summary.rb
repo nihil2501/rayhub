@@ -10,8 +10,8 @@ module Rayhub
         end
 
         ATTRIBUTE_MAP = {
-          latest_timestamp: :max_taken_at,
-          cumulative_count: :quantity_sum,
+          "latest_timestamp" => "max_taken_at",
+          "cumulative_count" => "quantity_sum",
         }.freeze
 
         def handle(request, response)

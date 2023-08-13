@@ -8,7 +8,7 @@ module Rayhub
     )
 
     get(
-      "/device_readings/:device_id",
+      "/device_readings/summary",
       to: "device_readings.summary"
     )
   end

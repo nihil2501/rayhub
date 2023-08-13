@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "event_sourcing"
+
 module Rayhub
   module Events
     DeviceReading =
