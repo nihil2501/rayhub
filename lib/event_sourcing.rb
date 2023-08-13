@@ -5,8 +5,9 @@ module EventSourcing
     def on_event_loaded(event)
       case event
       when Rayhub::Events::DeviceReading::Count
-        topic = :"device-reading/#{event.device_id}/count"
-        queue = topic_queues[topic]
+        device_id = event.device_id
+        topic = Topics::COUNT_DEVICE_READING % { device_id: }
+        queue = topic_queues[topic.to_sym]
         queue << event
       end
     end
@@ -14,8 +15,9 @@ module EventSourcing
     def on_aggregate_loaded(aggregate)
       case aggregate
       when Rayhub::Aggregates::DeviceReading::Count
-        topic = :"device-reading/#{aggregate.device_id}/count"
-        queue = topic_queues[topic]
+        device_id = aggregate.device_id
+        topic = Topics::COUNT_DEVICE_READING % { device_id: }
+        queue = topic_queues[topic.to_sym]
 
         while event = queue.shift do
           aggregate.apply(event)
@@ -26,7 +28,11 @@ module EventSourcing
     private
 
     def topic_queues
-      @topic_queues ||= Hash.new { |h, k| h[k] = new }
+      @topic_queues ||= Hash.new { |h, k| h[k] = [] }
     end
+  end
+
+  module Topics
+    COUNT_DEVICE_READING = "device-reading/%{device_id}/count"
   end
 end
