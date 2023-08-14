@@ -27,12 +27,15 @@ module Rayhub
 
         # TODO: Describe simulate-hood of this.
         def ensure_found!(aggregate)
-          taken_ats = aggregate.instance_variable_get(:@taken_ats)
-          found = !taken_ats.empty?
-          return if found
-
+          return if found?(aggregate)
           @repository.delete(aggregate.id)
           raise NotFound
+        end
+
+        def found?(aggregate)
+          !aggregate
+            .instance_variable_get(:@taken_ats)
+            .empty?
         end
       end
 
@@ -41,6 +44,11 @@ module Rayhub
       def initialize(device_id)
         @device_id = device_id
         @taken_ats = Set[]
+      end
+
+      def apply(event)
+        return if redundant?(event)
+        update(event)
       end
 
       private
@@ -55,12 +63,12 @@ module Rayhub
           :quantity_sum,
         )
 
+        private
+
         # TODO: Define this generically in parent class as a function that
         # applies the event in topological order to a declaratively defined DAG
         # of dependent attributes.
-        def apply(event)
-          return if redundant?(event)
-
+        def update(event)
           @max_taken_at = [
             @max_taken_at,
             event.taken_at
