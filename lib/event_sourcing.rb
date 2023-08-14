@@ -5,51 +5,44 @@ module EventSourcing
     def on_event_loaded(event)
       case event
       when Rayhub::Events::DeviceReading::Count
-        queue = TopicQueue.count_device_reading(event.device_id)
-        queue.enqueue(event)
+        topic = :"device_reading/#{event.device_id}/count"
+        TopicQueue.enqueue(topic, event)
       end
     end
 
     def on_aggregate_loaded(aggregate)
       case aggregate
       when Rayhub::Aggregates::DeviceReading::Count
-        queue = TopicQueue.count_device_reading(aggregate.device_id)
-        queue.drain { |event| aggregate.apply(event) }
+        topic = :"device_reading/#{aggregate.device_id}/count"
+        TopicQueue.drain(topic) do |event|
+          aggregate.apply(event)
+        end
       end
     end
   end
 
-  class TopicQueue
-    TOPICS = [
-      :count_device_reading,
-    ].freeze
+  module TopicQueue
+    class << self
+      def enqueue(*topic, item)
+        queue = topic_queues[topic]
+        queue << item
+      end
 
-    TOPICS.each do |topic|
-      define_method(topic) do |*args|
-        topic = :"#{topic}(#{args})"
+      def drain(*topic, &process)
+        queue = topic_queues.delete(topic)
+        while item = queue.shift do
+          process&.(item)
+        end
+      end
+
+      private
+
+      def topic_queues
         @topic_queues ||=
           Hash.new do |memo, topic|
-            memo[topic] = new
+            memo[topic] = []
           end
-
-        @topic_queues[topic]
       end
-    end
-
-    def initialize
-      @queue = []
-    end
-
-    def enqueue(item)
-      @queue << item
-    end
-
-    def dequeue
-      @queue.shift
-    end
-
-    def drain
-      yield(dequeue) until empty?
     end
   end
 end

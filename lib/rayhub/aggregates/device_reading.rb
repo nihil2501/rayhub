@@ -19,7 +19,6 @@ module Rayhub
           @repository[id].tap do |aggregate|
             # TODO: Document our interesting thinking here.
             EventSourcing.on_aggregate_loaded(aggregate)
-            # TODO: Figure out what to do about erroneous queues!
             ensure_found!(aggregate)
           end
         end
