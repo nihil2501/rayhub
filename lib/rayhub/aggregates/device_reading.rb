@@ -10,10 +10,10 @@ module Rayhub
 
       class << self
         def find(device_id)
-          id = :"#{self}/#{device_id}"
+          id = [self, device_id]
           @repository ||=
             Hash.new do |memo, id|
-              memo[id] = new(id)
+              memo[id] = new(id.last)
             end
 
           @repository[id].tap do |aggregate|
@@ -28,7 +28,7 @@ module Rayhub
         # TODO: Describe simulate-hood of this.
         def ensure_found!(aggregate)
           return if found?(aggregate)
-          @repository.delete(aggregate.id)
+          @repository.delete(aggregate.device_id)
           raise NotFound
         end
 

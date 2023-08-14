@@ -2,14 +2,9 @@
 
 module Rayhub
   class Routes < Hanami::Routes
-    post(
-      "/device_readings",
-      to: "device_readings.create"
-    )
-
-    get(
-      "/device_readings/summary",
-      to: "device_readings.summary"
-    )
+    scope "device_readings" do
+      post "/", to: "device_readings.create"
+      get "/summary", to: "device_readings.summary"
+    end
   end
 end

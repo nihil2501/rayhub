@@ -4,6 +4,8 @@ module Rayhub
   module Actions
     module DeviceReadings
       class Summary < Rayhub::Action
+        handle_exception Aggregates::DeviceReading::NotFound => 404
+
         params do
           required(:id).filled(:string)
           optional(:attributes).array(:string)

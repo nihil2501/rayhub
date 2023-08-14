@@ -42,13 +42,14 @@ module EventSourcing
 
   module TopicQueue
     class << self
-      def enqueue(*topic, item)
+      def enqueue(topic, item)
         queue = topic_queues[topic]
         queue << item
       end
 
-      def drain(*topic, &process)
-        queue = topic_queues.delete(topic)
+      def drain(topic, &process)
+        # Notice that we delete the topic queue when draining.
+        queue = topic_queues.delete(topic).to_a
         while item = queue.shift do
           process&.(item)
         end

@@ -16,13 +16,39 @@ RSpec.describe "GET /device_readings/summary", type: [:request] do
       }
     end
 
-    it "returns a device reading summary" do
-      get("/device_readings/summary", params, headers)
+    it "404s with no prior device readings" do
+        get("/device_readings/summary", params, headers)
 
-      expect(last_response).to be_ok
-      expect(last_response.body).to eq({
-        "latest_timestamp" => nil,
-      }.to_json)
+        expect(last_response).to be_not_found
+    end
+
+    context "when there have been device readings" do
+      before do
+        post_params = {
+          "id" => "36d5658a-6908-479e-887e-a949ec199272",
+          "readings" => [
+            {
+              "timestamp" => "2021-09-29T16:08:15+01:00",
+              "count" => 2
+            },
+            {
+              "timestamp" => "2021-09-29T16:09:15+01:00",
+              "count" => 15
+            }
+          ],
+        }
+
+        post("/device_readings", post_params.to_json, headers)
+      end
+
+      it "returns a device reading summary" do
+        get("/device_readings/summary", params, headers)
+
+        expect(last_response).to be_ok
+        expect(last_response.body).to eq({
+          "latest_timestamp" => "2021-09-29T16:09:15+01:00",
+        }.to_json)
+      end
     end
   end
 
