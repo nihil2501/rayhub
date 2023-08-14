@@ -11,12 +11,7 @@ module Rayhub
       class << self
         def find(device_id)
           id = [self, device_id]
-          @repository ||=
-            Hash.new do |memo, id|
-              memo[id] = new(id.last)
-            end
-
-          @repository[id].tap do |aggregate|
+          repository[id].tap do |aggregate|
             # TODO: Document our interesting thinking here.
             EventSourcing.on_aggregate_loaded(aggregate)
             ensure_found!(aggregate)
@@ -28,7 +23,7 @@ module Rayhub
         # TODO: Describe simulate-hood of this.
         def ensure_found!(aggregate)
           return if found?(aggregate)
-          @repository.delete(aggregate.device_id)
+          repository.delete(aggregate.device_id)
           raise NotFound
         end
 
@@ -36,6 +31,14 @@ module Rayhub
           !aggregate
             .instance_variable_get(:@taken_ats)
             .empty?
+        end
+
+        def repository
+          @repository ||=
+            Hash.new do |memo, id|
+              device_id = id.last
+              memo[id] = new(device_id)
+            end
         end
       end
 
