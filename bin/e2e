@@ -4,10 +4,14 @@ rayhub &
 SERVER_PID=$!
 sleep 1
 
+echo
 curl http://0.0.0.0:2300/device_readings/summary?id=1234
-echo ""
 
-curl --json '{"hi": "bye"}' http://0.0.0.0:2300/device_readings
-echo ""
+echo
+echo
+curl --json '{"id": "1234", "readings": []}' \
+  http://0.0.0.0:2300/device_readings
 
+echo
+echo
 kill $SERVER_PID

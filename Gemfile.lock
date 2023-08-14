@@ -167,7 +167,6 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv
-  dry-types (~> 1.0, >= 1.6.1)
   guard-puma (~> 0.8)
   hanami (~> 2.0)
   hanami-controller (~> 2.0)

@@ -6,7 +6,7 @@ module Rayhub
   module Aggregates
     class DeviceReading
       Error = Class.new(RuntimeError)
-      NotFound = Class.new(Error)
+      NotFoundError = Class.new(Error)
 
       class << self
         def find(device_id)
@@ -24,7 +24,7 @@ module Rayhub
         def ensure_found!(aggregate)
           return if found?(aggregate)
           repository.delete(aggregate.device_id)
-          raise NotFound
+          raise NotFoundError
         end
 
         def found?(aggregate)
