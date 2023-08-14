@@ -55,6 +55,10 @@ module EventSourcing
         end
       end
 
+      def nuke!
+        @topic_queues = nil
+      end
+
       private
 
       def topic_queues
