@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # Can exclude this from your own local e2e test. This just helps with local dev.
+# If you want this, make sure to change gem to current version produced during
+# `gem build`.
 gem build rayhub.gemspec
 gem install rayhub-0.1.0.gem
 
 rayhub &
 SERVER_PID=$!
-sleep 1
+sleep 2
 
 echo
 curl "http://0.0.0.0:2300/device_readings/summary?id=device-1"

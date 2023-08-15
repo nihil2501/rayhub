@@ -30,6 +30,9 @@ module Rayhub
         end
       end
 
+      # Might be nice to find a different way to achieve polymorphism because
+      # template pattern means there is subclass only code that is invoked from
+      # superclass--confusing!
       class Count < self
         UNIT = :each
       end

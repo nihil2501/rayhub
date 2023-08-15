@@ -13,7 +13,10 @@ module Rayhub
           repository[device_id].tap do |aggregate|
             # TODO: Document our interesting thinking here.
             EventSourcing.on_aggregate_loaded(aggregate)
-            ensure_found!(aggregate)
+            next if aggregate.persisted?
+
+            repository.delete(aggregate.device_id)
+            raise NotFoundError
           end
         end
 
@@ -22,19 +25,6 @@ module Rayhub
         end
 
         private
-
-        # TODO: Describe simulate-hood of this.
-        def ensure_found!(aggregate)
-          return if found?(aggregate)
-          repository.delete(aggregate.device_id)
-          raise NotFoundError
-        end
-
-        def found?(aggregate)
-          !aggregate
-            .instance_variable_get(:@taken_ats)
-            .empty?
-        end
 
         def repository
           @repository ||=
@@ -54,6 +44,10 @@ module Rayhub
       def apply(event)
         return if redundant?(event)
         update(event)
+      end
+
+      def persisted?
+        !@taken_ats.empty?
       end
 
       private

@@ -6,7 +6,7 @@ module EventSourcing
   # configurations that some other domain-specific code location will leverage.
   # The configuration should allow one to specify 4 parameters such that an
   # event will be associated through a topic to the appropiate aggregate.
-  # The configuration parameters are:
+  # The configuration parameters are something like:
   #   * event_type
   #   * get_id_from_event
   #   * aggregate_type
@@ -40,6 +40,8 @@ module EventSourcing
     end
   end
 
+  # `TopicQueue`, which is per-device-per-attribute, is isolated as just a
+  # possible implementation of carrying out the event sourcing.
   module TopicQueue
     class << self
       def enqueue(topic, item)
@@ -48,7 +50,9 @@ module EventSourcing
       end
 
       def drain(topic, &process)
-        # Notice that we delete the topic queue when draining.
+        # Notice that we delete the topic queue when draining. In particular,
+        # this helps limit trash that would be created by clients that fetch
+        # nonexistent aggregates from the API.
         queue = topic_queues.delete(topic).to_a
         while item = queue.shift do
           process&.(item)
