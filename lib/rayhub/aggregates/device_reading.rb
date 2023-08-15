@@ -11,10 +11,20 @@ module Rayhub
       class << self
         def find(device_id)
           repository[device_id].tap do |aggregate|
-            # TODO: Document our interesting thinking here.
+            # Because we don't have another process that is dedicated to
+            # carrying out event-sourcing asynchronously, we simulate that we do
+            # by producing the result of the processing half of the process and
+            # immediately advance the event-sourcing state to the point where a
+            # an aggregate has had all relevant events applied to it (under the
+            # hood this means that a corresponding work queue of some kind is
+            # drained and each item applied to the aggregate). By simulating
+            # this here, rather than up a layer, we let the caller just call
+            # `find` as if it were a genuine event-sourcing system.
             EventSourcing.on_aggregate_loaded(aggregate)
             next if aggregate.persisted?
 
+            # Limit the trash that would be created by clients that fetch
+            # nonexistent aggregates from the API.
             repository.delete(aggregate.device_id)
             raise NotFoundError
           end

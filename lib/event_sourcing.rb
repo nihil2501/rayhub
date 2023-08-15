@@ -3,16 +3,16 @@
 module EventSourcing
   # TODO: Here we hardcoded domain-specific logic into our generic event
   # sourcing module. Ideally, this module exposes a way to register
-  # configurations that some other domain-specific code location will leverage.
-  # The configuration should allow one to specify 4 parameters such that an
-  # event will be associated through a topic to the appropiate aggregate.
-  # The configuration parameters are something like:
-  #   * event_type
-  #   * get_id_from_event
-  #   * aggregate_type
-  #   * get_id_from_aggregate
-  # These parameters would be packaged together under a particular topic family,
-  # and then a topic will be the pairing of this family with an entity id.
+  # configurations that some other domain-specific module will leverage. The
+  # configuration should allow one to specify 4 parameters such that an event
+  # will be associated through a topic to the appropiate aggregate. These
+  # parameters would be packaged together under a particular topic family, and
+  # then a topic will be the pairing of this family with an entity id.
+  # The configuration settings would look something like:
+  #   * `event_type`
+  #   * `get_id_from_event`
+  #   * `aggregate_type`
+  #   * `get_id_from_aggregate`
   class << self
     def on_event_loaded(event)
       topic =

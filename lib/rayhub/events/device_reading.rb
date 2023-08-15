@@ -24,7 +24,14 @@ module Rayhub
           }
 
           new(**attrs).tap do |event|
-            # TODO: document our interesting thinking here.
+            # Because we don't have another process that is dedicated to
+            # carrying out event-sourcing asynchronously, we simulate that we do
+            # by producing the result of the ingestion half of the process and
+            # immediately advance the event-sourcing state to the point where a
+            # persisted event is loaded into the system (under the hood this
+            # means that it is placed into a work queue of some kind). By
+            # simulating this here, rather than up a layer, we let the caller
+            # just call `create` as if it were a genuine event-sourcing system. 
             EventSourcing.on_event_loaded(event)
           end
         end
