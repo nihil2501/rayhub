@@ -6,9 +6,11 @@ Gem::Specification.new do |spec|
   spec.author = "Oren Mittman"
   spec.authors = ["Oren Mittman"]
   spec.email = ["nihil2501@gmail.com"]
+  spec.license = "MIT"
+  spec.licenses = ["MIT"]
 
   spec.summary = "Store and process device readings from the field."
-  spec.description = "Store and process device readings from the field."
+  spec.description = "Use event sourcing to decouple device reading events from their aggregation into summary statistics over various types of measurements."
   spec.homepage = "https://github.com/nihil2501/rayhub"
   spec.required_ruby_version = ">= 3.2.2"
 
