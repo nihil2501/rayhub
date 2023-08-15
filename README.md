@@ -10,7 +10,7 @@ Make sure you have the following installed:
 
 [Create a personal access token (classic) on GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) with the `read:packages` scope.
 
-Install the gem by executing:
+Install the gem using the above token by executing:
 
     $ gem install rayhub -s https://GITHUB_USERNAME:GITHUB_PERSONAL_ACCESS_TOKEN@rubygems.pkg.github.com/nihil2501/
 
@@ -19,3 +19,6 @@ Install the gem by executing:
 Run the server:
 
     $ rayhub
+
+Perform an e2e test locally:
+    Take inspiration from the [e2e bash script](bin/e2e)
