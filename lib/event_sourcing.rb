@@ -19,6 +19,8 @@ module EventSourcing
         case event
         when Rayhub::Events::DeviceReading::Count
           :"device_reading/#{event.device_id}/count"
+        else
+          raise "Unrecognized event"
         end
 
       TopicQueue.enqueue(
@@ -32,6 +34,8 @@ module EventSourcing
         case aggregate
         when Rayhub::Aggregates::DeviceReading::Count
           :"device_reading/#{aggregate.device_id}/count"
+        else
+          raise "Unrecognized aggregate"
         end
 
       TopicQueue.drain(topic) do |event|
