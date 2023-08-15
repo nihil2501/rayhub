@@ -17,9 +17,9 @@ RSpec.describe "GET /device_readings/summary", type: [:request] do
     end
 
     it "404s with no prior device readings" do
-        get("/device_readings/summary", params, headers)
+      get("/device_readings/summary", params, headers)
 
-        expect(last_response).to be_not_found
+      expect(last_response).to be_not_found
     end
 
     context "when there have been device readings" do
@@ -53,19 +53,21 @@ RSpec.describe "GET /device_readings/summary", type: [:request] do
   end
 
   context "given invalid params" do
-    let(:params) do
-      {}
-    end
+    context "missing necessary id param" do
+      let(:params) do
+        {}
+      end
 
-    it "returns 422 unprocessable" do
-      get("/device_readings/summary", params, headers)
+      it "returns 422 unprocessable" do
+        get("/device_readings/summary", params, headers)
 
-      expect(last_response).to be_unprocessable
-      expect(last_response.body).to eq({
-        "errors" => {
-          "id" => ["is missing"],
-        }
-      }.to_json)
+        expect(last_response).to be_unprocessable
+        expect(last_response.body).to eq({
+          "errors" => {
+            "id" => ["is missing"],
+          }
+        }.to_json)
+      end
     end
   end
 end

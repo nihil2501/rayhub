@@ -66,8 +66,11 @@ module Rayhub
             )
           end
 
+          # I think `:accepted` is the right HTTP semantics for an asynchronous
+          # result as we have here when events are accumulated into an aggregate
+          # in the background.
+          response.status = :accepted
           response.body = ""
-          response.status = :created
         end
       end
     end

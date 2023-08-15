@@ -34,8 +34,8 @@ module Rayhub
             summary[to] = value
           end
 
-          response.body = summary.to_json
           response.status = :ok
+          response.body = summary.to_json
         end
       end
     end

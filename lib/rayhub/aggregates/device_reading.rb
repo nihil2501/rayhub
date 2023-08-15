@@ -10,12 +10,15 @@ module Rayhub
 
       class << self
         def find(device_id)
-          id = [self, device_id]
-          repository[id].tap do |aggregate|
+          repository[device_id].tap do |aggregate|
             # TODO: Document our interesting thinking here.
             EventSourcing.on_aggregate_loaded(aggregate)
             ensure_found!(aggregate)
           end
+        end
+
+        def nuke!
+          @repository = nil
         end
 
         private
@@ -35,9 +38,8 @@ module Rayhub
 
         def repository
           @repository ||=
-            Hash.new do |memo, id|
-              device_id = id.last
-              memo[id] = new(device_id)
+            Hash.new do |memo, device_id|
+              memo[device_id] = new(device_id)
             end
         end
       end
